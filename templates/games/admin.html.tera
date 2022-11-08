@@ -1,0 +1,12 @@
+
+    <div>
+      <form action="/games" method="post">
+        <label for="name">Name</label>
+        <input type="text" name="name">
+        <label for="status">Current Status:</label>
+        <select name="status">
+        {%- include "games/status_opts" %}
+        </select> 
+        <input type="submit" value="Submit">
+      </form>
+    </div>

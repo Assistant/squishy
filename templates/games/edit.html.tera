@@ -1,0 +1,8 @@
+
+      <form action="/games" method="post">
+        <input type="hidden" name="id" value="{{ game.id }}">
+        <select name="status">
+        {%- include "games/status_opts" %}
+        </select>
+        <input type="submit" value="Submit">      
+      </form>

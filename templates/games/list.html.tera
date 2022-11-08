@@ -1,0 +1,40 @@
+
+    <h1>Actively Playing | 今遊び</h1>
+    {% for game in list.active -%}
+    <div>
+      <p>{{ game.name }}</p>        
+        {%- if admin -%}
+          {%- include "games/edit" %}
+        {%- endif %}
+    </div>
+    {%- endfor %}
+
+    <h1>Games on Hold</h1>
+    {% for game in list.hold -%}
+    <div>
+      <p>{{ game.name }}</p>
+        {%- if admin -%}
+          {%- include "games/edit" %}
+        {%- endif %}
+    </div>
+    {%- endfor %}
+
+    <h1>Completed Games | 終わり</h1>
+    {% for game in list.completed -%}
+    <div>
+      <p>{{ game.name }}</p>        
+        {%- if admin -%}
+          {%- include "games/edit" %}
+        {%- endif %}
+    </div>
+    {%- endfor %}
+
+    <h1>Planned Games</h1>
+    {% for game in list.planned -%}
+    <div>
+      <p>{{ game.name }}</p>        
+        {%- if admin -%}
+          {%- include "games/edit" %}
+        {%- endif %}
+    </div>
+    {%- endfor %}

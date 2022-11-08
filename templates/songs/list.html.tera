@@ -1,0 +1,7 @@
+    {% for song in songs %}
+      <tr>
+        <td>{{ song.artist }}</td>
+        <td>{{ song.title }}</td>
+        <td>{{ song.year }}</td>
+      </tr>
+    {%- endfor %}
