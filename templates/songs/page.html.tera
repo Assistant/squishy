@@ -1,14 +1,19 @@
 {% extends "base" %}
-{% block title %}Karaoke{% endblock title %}
+    {% block title %}Karaoke{% endblock title %}
+{% block head %}
+    {{ super() }}
+    <script src="/songs.js" defer></script>
+    <link rel="stylesheet" href="/songs.css">    
+{% endblock head %}
 {% block content %}
     {%- if admin -%}
       {% include "songs/admin" %}
     {%- endif %}
-    <table>
+    <table id="songs">
       <tr>
-        <th>Artist</th>
-        <th>Title</th>
-        <th>Year</th>
+        <th onclick="sort(0)">Artist</th>
+        <th onclick="sort(1)">Title</th>
+        <th onclick="sort(2)">Year</th>
       </tr>
     {%- include "songs/list" %}
     </table>

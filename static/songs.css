@@ -1,0 +1,7 @@
+table#songs th[data-sort="asc"]::after {
+    content: "\25b2";
+}
+
+table#songs th[data-sort="desc"]::after {
+    content: "\25bc";
+}
