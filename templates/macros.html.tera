@@ -17,7 +17,7 @@
 {% endmacro submit %}
 
 {% macro form_css(solo=false) %}
-{% if solo %}p-4{% else %}mb-4 p-4 border-b-2 md:rounded-md md:border-2{% endif %}
+{% if solo %}p-4{% else %}mb-12 p-4 border-b-2 md:rounded-md md:border-2{% endif %}
 {% endmacro %}
 
 {% macro is_password(name) %}
@@ -34,24 +34,53 @@
 {% endmacro form %}
 
 {% macro nav_link(to, text) %}
-<a class="hover:underline decoration-2 underline-offset-2 mx-2 opacity-50 hover:opacity-90" href="{{to}}">{{text}}</a>
+<a class="hover:underline decoration-2 underline-offset-2 mx-2 opacity-[.66] hover:opacity-100"
+  href="{{to}}">{{text}}</a>
 {% endmacro nav_link %}
 
 {% macro header(text) %}
-<h1 class="text-lg font-bold my-2">{{text}}</h1>
+<h1 class="text-xl font-bold my-2">{{text}}</h1>
 {% endmacro header %}
 
-{% macro game(entry, admin) %}
+{% macro options(type="")%}
+<option value="Active" {% if type=="active" %}selected{% endif %}>Actively Playing</option>
+<option value="Hold" {% if type=="hold" %}selected{% endif %}>On Hold</option>
+<option value="Completed" {% if type=="completed" %}selected{% endif %}>Completed</option>
+<option value="Planned" {% if type=="planned" %}selected{% endif %}>Planned</option>
+{% endmacro options %}
+
+{% macro game(entry, type, admin) %}
 <div class="even:bg-white odd:bg-slate-100 p-2 flex justify-between">
   <p>{{ entry.name }}</p>
   {%- if admin -%}
   <form action="/games" method="post">
     <input type="hidden" name="id" value="{{ entry.id }}">
     <select name="status" class="p-0 pl-1 pr-8">
-      {%- include "games/status_opts" %}
+      {{ macros::options(type=type) }}
     </select>
     {{ macros::submit(name="Edit") }}
   </form>
   {%- endif %}
 </div>
 {% endmacro game %}
+
+{% macro category_title(type) %}
+{%- if type == "active" -%}
+Actively Playing | 今遊び
+{%- elif type == "hold" -%}
+Games on Hold
+{%- elif type == "completed" -%}
+Completed Games | 終わり
+{%- elif type == "planned" -%}
+Planned Games
+{%- endif -%}
+{% endmacro category_title %}
+
+{% macro game_category(games, type, admin) %}
+{{ macros::header(text=macros::category_title(type=type)) }}
+<div class="mb-12">
+  {% for game in games -%}
+  {{ macros::game(entry=game, type=type, admin=admin) }}
+  {%- endfor %}
+</div>
+{% endmacro game_category %}

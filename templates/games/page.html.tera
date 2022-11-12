@@ -4,7 +4,19 @@
 
 {% block content %}
 {%- if admin -%}
-{% include "games/admin" %}
+<form method="post" class="{{ macros::form_css() }}">
+  {{ macros::input(label="Name") }}
+  <label class="block mb-4 w-full">
+    Status
+    <select name="status" class="block w-full">
+      {{ macros::options() }}
+    </select>
+  </label>
+  {{ macros::submit() }}
+</form>
 {%- endif %}
-{%- include "games/list" %}
+{{ macros::game_category(games=list.active, type="active", admin=admin) }}
+{{ macros::game_category(games=list.hold, type="hold", admin=admin) }}
+{{ macros::game_category(games=list.completed, type="completed", admin=admin) }}
+{{ macros::game_category(games=list.planned, type="planned", admin=admin) }}
 {% endblock content %}

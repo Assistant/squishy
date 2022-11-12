@@ -11,12 +11,18 @@
 {%- if admin -%}
 {{ macros::form(inputs=["Artist", "Title", "Year"]) }}
 {%- endif %}
-<table id="songs" class="w-full mx-auto">
+<table id="songs" class="w-full mx-auto mb-12">
   <tr class="border-b">
     {{ macros::table_header(label="Artist", func="sort(0)") }}
     {{ macros::table_header(label="Title", func="sort(1)") }}
     {{ macros::table_header(label="Year", func="sort(2)") }}
   </tr>
-  {%- include "songs/list" %}
+  {% for song in songs %}
+  <tr class="even:bg-white odd:bg-slate-100">
+    <td class="p-2">{{ song.artist }}</td>
+    <td class="p-2">{{ song.title }}</td>
+    <td class="p-2">{{ song.year }}</td>
+  </tr>
+  {%- endfor %}
 </table>
 {% endblock content %}
