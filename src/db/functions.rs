@@ -20,6 +20,9 @@ pub(crate) async fn songs(db: &Db) -> Result<Vec<Song>, Box<dyn Error>> {
 }
 
 pub(crate) async fn add_song(db: &Db, artist: &str, title: &str, year: &str) {
+    if artist.is_empty() || title.is_empty() || year.is_empty() {
+        return;
+    }
     let vars = params! { artist, title, year };
     if let Ok(false) = db.exists(CHECK_SONG, vars.clone()).await {
         _ = db.query(ADD_SONG, vars).await;
@@ -37,6 +40,9 @@ pub(crate) async fn games(db: &Db) -> Result<Vec<Game>, Box<dyn Error>> {
 }
 
 pub(crate) async fn add_game(db: &Db, name: &str, status: &str) {
+    if name.is_empty() {
+        return;
+    }
     let vars = params! { name, status };
     if let Ok(false) = db.exists(CHECK_GAME, vars.clone()).await {
         _ = db.query(ADD_GAME, vars).await;
