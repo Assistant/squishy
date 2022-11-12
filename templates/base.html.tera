@@ -11,7 +11,7 @@
   <meta content="{% block ename %}SquishyWishyBoo{% endblock ename %}" property="og:site_name">
   <meta content="{% block etitle %}SquishyWishyBoo{% endblock etitle %}" property="og:title">
   <meta content="{% block edesc %}SquishyWishyBoo{% endblock edesc %}" property="og:description">
-  <meta content="{% block ecolor %}#edeea8{% endblock ecolor %}" name="theme-color">
+  <meta content="{% block ecolor %}#ffffff{% endblock ecolor %}" name="theme-color">
   <meta content="{% block eimage %}/static/embed.png{% endblock eimage %}" property="og:image">
   <title>{% block title %}SquishyWishyBoo{% endblock title %}</title>
   {% endblock head %}
