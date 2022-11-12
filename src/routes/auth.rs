@@ -42,9 +42,14 @@ pub(crate) async fn login(
 }
 
 #[get("/register/<invite>")]
-pub(crate) async fn register_page(db: &State<Db>, invite: &str) -> Result<Template, Status> {
+pub(crate) async fn register_page(
+    db: &State<Db>,
+    invite: &str,
+    user: Option<AuthenticatedUser>,
+) -> Result<Template, Status> {
+    let admin = user.is_some();
     if functions::check_invite(db, invite).await {
-        Ok(Template::render("register", context! { invite }))
+        Ok(Template::render("register", context! { invite, admin }))
     } else {
         Err(Status::NotFound)
     }

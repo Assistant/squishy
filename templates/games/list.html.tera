@@ -1,40 +1,27 @@
+{{ macros::header(text="Actively Playing | 今遊び") }}
+<div>
+  {% for game in list.active -%}
+  {{ macros::game(entry=game, admin=admin) }}
+  {%- endfor %}
+</div>
 
-    <h1>Actively Playing | 今遊び</h1>
-    {% for game in list.active -%}
-    <div>
-      <p>{{ game.name }}</p>        
-        {%- if admin -%}
-          {%- include "games/edit" %}
-        {%- endif %}
-    </div>
-    {%- endfor %}
+{{ macros::header(text="Games on Hold") }}
+<div>
+  {% for game in list.hold -%}
+  {{ macros::game(entry=game, admin=admin) }}
+  {%- endfor %}
+</div>
 
-    <h1>Games on Hold</h1>
-    {% for game in list.hold -%}
-    <div>
-      <p>{{ game.name }}</p>
-        {%- if admin -%}
-          {%- include "games/edit" %}
-        {%- endif %}
-    </div>
-    {%- endfor %}
+{{ macros::header(text="Completed Games | 終わり") }}
+<div>
+  {% for game in list.completed -%}
+  {{ macros::game(entry=game, admin=admin) }}
+  {%- endfor %}
+</div>
 
-    <h1>Completed Games | 終わり</h1>
-    {% for game in list.completed -%}
-    <div>
-      <p>{{ game.name }}</p>        
-        {%- if admin -%}
-          {%- include "games/edit" %}
-        {%- endif %}
-    </div>
-    {%- endfor %}
-
-    <h1>Planned Games</h1>
-    {% for game in list.planned -%}
-    <div>
-      <p>{{ game.name }}</p>        
-        {%- if admin -%}
-          {%- include "games/edit" %}
-        {%- endif %}
-    </div>
-    {%- endfor %}
+{{ macros::header(text="Planned Games") }}
+<div>
+  {% for game in list.planned -%}
+  {{ macros::game(entry=game, admin=admin) }}
+  {%- endfor %}
+</div>

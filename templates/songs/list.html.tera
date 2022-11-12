@@ -1,7 +1,7 @@
-    {% for song in songs %}
-      <tr>
-        <td>{{ song.artist }}</td>
-        <td>{{ song.title }}</td>
-        <td>{{ song.year }}</td>
-      </tr>
-    {%- endfor %}
+{% for song in songs %}
+<tr class="even:bg-white odd:bg-slate-100">
+  <td class="p-2">{{ song.artist }}</td>
+  <td class="p-2">{{ song.title }}</td>
+  <td class="p-2">{{ song.year }}</td>
+</tr>
+{%- endfor %}

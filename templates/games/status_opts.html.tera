@@ -1,5 +1,4 @@
-
-          <option value="Active">Actively Playing</option>
-          <option value="Hold">On Hold</option>
-          <option value="Completed">Completed</option>
-          <option value="Planned">Planned</option>
+<option value="Active">Actively Playing</option>
+<option value="Hold">On Hold</option>
+<option value="Completed">Completed</option>
+<option value="Planned">Planned</option>

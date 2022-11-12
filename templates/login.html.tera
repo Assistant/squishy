@@ -1,14 +1,10 @@
 {% extends "base" %}
+
 {% block title %}Login{% endblock title %}
+
 {% block content %}
-    {%- if failed %}
-    <p>Login failed!</p>
-    {%- endif %}
-    <form action="/login" method="post">
-      <label for="username">Username</label><br>
-      <input type="text" id="username" name="username"><br>
-      <label for="password">Password</label><br>
-      <input type="password" id="password" name="password"><br><br>
-      <input type="submit" value="Submit">
-    </form>
+{%- if failed %}
+<p class="m-4 mb-0 p-2 bg-red-400/50 font-bold text-md text-center">Wrong username or password.</p>
+{%- endif %}
+{{ macros::form(inputs=["Username", "Password"], solo=true)}}
 {% endblock content %}

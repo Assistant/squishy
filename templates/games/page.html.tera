@@ -1,8 +1,10 @@
 {% extends "base" %}
+
 {% block title %}Games{% endblock title %}
+
 {% block content %}
-    {%- if admin -%}
-      {% include "games/admin" %}
-    {%- endif %}
-    {%- include "games/list" %}
+{%- if admin -%}
+{% include "games/admin" %}
+{%- endif %}
+{%- include "games/list" %}
 {% endblock content %}

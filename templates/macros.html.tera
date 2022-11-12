@@ -1,0 +1,57 @@
+{% macro table_header(label, func) %}
+<th onclick="{{func}}"
+  class="after:text-gray-400 data-[sort=asc]:after:content-['\25b2'] data-[sort=desc]:after:content-['\25bc'] after:w-0 after:inline-block mx-4">
+  {{label}}
+</th>
+{% endmacro input %}
+
+{% macro input(label, type="text") %}
+<label class="block mb-4 w-full">
+  <span>{{label}}</span>
+  <input type="{{type}}" class="block w-full" name="{{label | lower}}">
+</label>
+{% endmacro input %}
+
+{% macro submit(name="Submit") %}
+<input class="border px-2 border-gray-500 bg-white" type="submit" value="{{name}}">
+{% endmacro submit %}
+
+{% macro form_css(solo=false) %}
+{% if solo %}p-4{% else %}mb-4 p-4 border-b-2 md:rounded-md md:border-2{% endif %}
+{% endmacro %}
+
+{% macro is_password(name) %}
+{%- if name == "Password" -%}password{%- else -%}text{%- endif -%}
+{% endmacro is_password %}
+
+{% macro form(inputs, solo=false) %}
+<form method="post" class="{{ macros::form_css(solo=solo) }}">
+  {% for field in inputs %}
+  {{ macros::input(label=field, type=macros::is_password(name=field)) }}
+  {% endfor %}
+  {{ macros::submit() }}
+</form>
+{% endmacro form %}
+
+{% macro nav_link(to, text) %}
+<a class="hover:underline decoration-2 underline-offset-2 mx-2 opacity-50 hover:opacity-90" href="{{to}}">{{text}}</a>
+{% endmacro nav_link %}
+
+{% macro header(text) %}
+<h1 class="text-lg font-bold my-2">{{text}}</h1>
+{% endmacro header %}
+
+{% macro game(entry, admin) %}
+<div class="even:bg-white odd:bg-slate-100 p-2 flex justify-between">
+  <p>{{ entry.name }}</p>
+  {%- if admin -%}
+  <form action="/games" method="post">
+    <input type="hidden" name="id" value="{{ entry.id }}">
+    <select name="status" class="p-0 pl-1 pr-8">
+      {%- include "games/status_opts" %}
+    </select>
+    {{ macros::submit(name="Edit") }}
+  </form>
+  {%- endif %}
+</div>
+{% endmacro game %}

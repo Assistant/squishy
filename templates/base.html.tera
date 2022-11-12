@@ -1,20 +1,28 @@
+{% import "macros" as macros %}
+
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta content="text/html; charset=utf-8" http-equiv="content-type">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    {% block head %}
-    <meta content="{% block ename %}SquishyWishyBoo{% endblock ename %}" property="og:site_name">
-    <meta content="{% block etitle %}SquishyWishyBoo{% endblock etitle %}" property="og:title">
-    <meta content="{% block edesc %}SquishyWishyBoo{% endblock edesc %}" property="og:description">
-    <meta content="{% block ecolor %}#edeea8{% endblock ecolor %}" name="theme-color">
-    <meta content="{% block eimage %}/static/embed.png{% endblock eimage %}" property="og:image">
-    <title>{% block title %}SquishyWishyBoo{% endblock title %}</title>
-    {% endblock head %}
-  </head>
-  <body>
-    {%- include "components/nav" %}
+
+<head>
+  <meta content="text/html; charset=utf-8" http-equiv="content-type">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/style.css">
+  {% block head %}
+  <meta content="{% block ename %}SquishyWishyBoo{% endblock ename %}" property="og:site_name">
+  <meta content="{% block etitle %}SquishyWishyBoo{% endblock etitle %}" property="og:title">
+  <meta content="{% block edesc %}SquishyWishyBoo{% endblock edesc %}" property="og:description">
+  <meta content="{% block ecolor %}#edeea8{% endblock ecolor %}" name="theme-color">
+  <meta content="{% block eimage %}/static/embed.png{% endblock eimage %}" property="og:image">
+  <title>{% block title %}SquishyWishyBoo{% endblock title %}</title>
+  {% endblock head %}
+</head>
+
+<body class="mb-4">
+  {%- include "components/nav" %}
+  <div class="md:max-w-3xl px-4 md:mx-auto">
     {% block content %}
     {% endblock content %}
-  </body>
+  </div>
+</body>
+
 </html>
