@@ -85,5 +85,8 @@ Planned Games
   {% for game in games -%}
   {{ macros::game(entry=game, type=type, admin=admin) }}
   {%- endfor %}
+  {% if type == "planned" %}
+    {{ macros::game(entry=zero, type=type, admin=false) }}
+  {% endif %}
 </div>
 {% endmacro game_category %}
