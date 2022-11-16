@@ -46,7 +46,7 @@ pub(crate) static ADD_SONG: &str =
 pub(crate) static CHECK_SONG: &str =
     "SELECT * FROM song WHERE artist = $artist AND title = $title AND year = $year";
 
-pub(crate) static GAMES: &str = "SELECT * FROM game ORDER BY modified DESC;";
+pub(crate) static GAMES: &str = "SELECT * FROM game ORDER BY name ASC;";
 pub(crate) static ADD_GAME: &str =
     "CREATE game SET name = $name, status = $status, modified = time::now();";
 pub(crate) static CHECK_GAME: &str = "SELECT * FROM game WHERE name = $name;";
