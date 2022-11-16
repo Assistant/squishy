@@ -1,23 +1,22 @@
 {% macro table_header(label, func) %}
 <th onclick="{{func}}"
-  class="after:text-gray-400 data-[sort=asc]:after:content-['\25b2'] data-[sort=desc]:after:content-['\25bc'] after:w-0 after:inline-block mx-4">
-  {{label}}
-</th>
+  class="cursor-pointer decoration-2 decoration-sprout underline-offset-2 hover:underline hover:dark:text-sprout after:text-sprout data-[sort=asc]:after:content-['\25b2'] data-[sort=desc]:after:content-['\25bc'] after:w-0 after:inline-block after:translate-x-1 after:-translate-y-0.5 mx-4">
+  {{label}}</th>
 {% endmacro input %}
 
 {% macro input(label, type="text") %}
 <label class="block mb-4 w-full">
   <span>{{label}}</span>
-  <input type="{{type}}" class="block w-full" name="{{label | lower}}">
+  <input type="{{type}}" class="block w-full focus:ring-tie focus:border-tie dark:bg-dark-light" name="{{label | lower}}">
 </label>
 {% endmacro input %}
 
 {% macro submit(name="Submit") %}
-<input class="border px-2 border-gray-500 bg-white" type="submit" value="{{name}}">
+<input class="border px-2 border-gray-500 bg-white dark:bg-dark-light" type="submit" value="{{name}}">
 {% endmacro submit %}
 
 {% macro form_css(solo=false) %}
-{% if solo %}p-4{% else %}mb-12 p-4 border-b-2 md:rounded-md md:border-2{% endif %}
+{% if solo %}p-4 border-tie{% else %}mb-12 p-4 border-b border-tie md:rounded-md md:border{% endif %}
 {% endmacro %}
 
 {% macro is_password(name) %}
@@ -33,9 +32,13 @@
 </form>
 {% endmacro form %}
 
-{% macro nav_link(to, text) %}
-<a class="hover:underline decoration-2 underline-offset-2 mx-2 opacity-[.66] hover:opacity-100"
-  href="{{to}}">{{text}}</a>
+{% macro nav_link(to, text, selected) %}
+{% set css = "mx-2 decoration-2 decoration-sprout underline-offset-2 hover:underline hover:dark:text-sprout" %}
+{% if selected == to %}
+<a class="{{css}} underline dark:text-sprout" href="{{to}}">{{text}}</a>
+{% else %}
+<a class="{{css}}" href="{{to}}">{{text}}</a>
+{% endif %}
 {% endmacro nav_link %}
 
 {% macro header(text) %}
@@ -50,12 +53,12 @@
 {% endmacro options %}
 
 {% macro game(entry, type, admin) %}
-<div class="even:bg-white odd:bg-slate-100 p-2 flex justify-between">
+<div class="even:bg-white odd:bg-slate-100 dark:even:bg-dark dark:odd:bg-dark-light p-2 flex justify-between">
   <p>{{ entry.name }}</p>
   {%- if admin -%}
   <form action="/games" method="post">
     <input type="hidden" name="id" value="{{ entry.id }}">
-    <select name="status" class="p-0 pl-1 pr-8">
+    <select name="status" class="p-0 pl-1 pr-8 dark:bg-dark-light focus:ring-tie focus:border-tie">
       {{ macros::options(type=type) }}
     </select>
     {{ macros::submit(name="Edit") }}

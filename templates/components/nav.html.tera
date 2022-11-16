@@ -1,10 +1,15 @@
-<nav class="flex items-center justify-center shadow-md mb-12">
+<nav class="flex items-center justify-center mb-12 border-b border-b-tie">
   <div class="mx-auto w-auto p-4 font-bold">
-    {{ macros::nav_link(to="/", text="Home") }}
-    {{ macros::nav_link(to="/songs", text="Songs") }}
-    {{ macros::nav_link(to="/games", text="Games") }}
+    {% if not selected %}
+    {% set selected="" %}
+    {% endif %}
+    {{ macros::nav_link(to="/", text="Home", selected=selected) }}
+    {{ macros::nav_link(to="/songs", text="Songs", selected=selected) }}
+    {{ macros::nav_link(to="/games", text="Games", selected=selected) }}
     {%- if not admin %}
-    {{ macros::nav_link(to="/login", text="Login") }}
+    {{ macros::nav_link(to="/login", text="Login", selected=selected) }}
+    {% else %}
+    {{ macros::nav_link(to="javascript:document.cookie = 'x-username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';window.location.reload()", text="Logout", selected=selected) }}
     {%- endif %}
   </div>
 </nav>

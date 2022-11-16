@@ -27,7 +27,7 @@ pub(crate) async fn index(db: &State<Db>, user: Option<AuthenticatedUser>) -> Te
             }
             a
         });
-    Template::render("games/page", context! { list, admin })
+    Template::render("games/page", context! { list, admin, selected: "/games" })
 }
 
 #[post("/games", data = "<game>")]

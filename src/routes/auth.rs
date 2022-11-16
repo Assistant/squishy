@@ -23,7 +23,7 @@ pub(crate) fn index(
         Err(redirect!("/"))
     } else {
         let failed = params.contains_key("failed");
-        Ok(Template::render("login", context! { failed }))
+        Ok(Template::render("login", context! { failed, selected: "/login" }))
     }
 }
 

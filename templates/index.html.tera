@@ -1,4 +1,7 @@
 {% extends "base" %}
 
+{% block etitle %}Home Page{% endblock etitle %}
+{% block edesc %}Squishy's website{% endblock edesc %}
+
 {% block content %}
 {% endblock content %}

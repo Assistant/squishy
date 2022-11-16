@@ -15,7 +15,7 @@ use rocket_dyn_templates::{context, Template};
 pub(crate) async fn index(db: &State<Db>, user: Option<AuthenticatedUser>) -> Template {
     let admin = user.is_some();
     let list = functions::songs(db).await.unwrap_or_default();
-    Template::render("songs/page", context! { songs: list, admin })
+    Template::render("songs/page", context! { songs: list, admin, selected: "/songs" })
 }
 
 #[post("/songs", data = "<song>")]

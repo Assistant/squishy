@@ -2,13 +2,16 @@
 
 {% block title %}Games{% endblock title %}
 
+{% block etitle %}Games{% endblock etitle %}
+{% block edesc %}Games that Squishy has played{% endblock edesc %}
+
 {% block content %}
 {%- if admin -%}
 <form method="post" class="{{ macros::form_css() }}">
   {{ macros::input(label="Name") }}
   <label class="block mb-4 w-full">
     Status
-    <select name="status" class="block w-full">
+    <select name="status" class="block w-full dark:bg-dark-light focus:ring-tie focus:border-tie">
       {{ macros::options() }}
     </select>
   </label>

@@ -2,9 +2,12 @@
 
 {% block title %}Login{% endblock title %}
 
+{% block etitle %}Login{% endblock etitle %}
+{% block edesc %}Only Squishy allowed{% endblock edesc %}
+
 {% block content %}
 {%- if failed %}
-<p class="m-4 mb-0 p-2 bg-red-400/50 font-bold text-md text-center">Wrong username or password.</p>
+<p class="m-4 mb-0 p-2 bg-tie text-white font-bold text-md text-center">Wrong username or password.</p>
 {%- endif %}
 {{ macros::form(inputs=["Username", "Password"], solo=true)}}
 {% endblock content %}
