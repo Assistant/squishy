@@ -6,24 +6,29 @@ use crate::{
 use rocket::{
     form::Form,
     http::{Cookie, CookieJar, Status},
-    response::Redirect,
+    request::FlashMessage,
+    response::{Flash, Redirect},
     serde::Deserialize,
     State,
 };
 use rocket_dyn_templates::{context, Template};
-use std::collections::HashMap;
 
-#[get("/login?<params..>")]
+#[get("/login")]
 #[allow(clippy::result_large_err)]
 pub(crate) fn index(
     user: Option<AuthenticatedUser>,
-    params: HashMap<String, String>,
+    flash: Option<FlashMessage<'_>>,
 ) -> Result<Template, Redirect> {
     if user.is_some() {
-        Err(redirect!("/"))
+        return Err(redirect!("/"));
+    }
+
+    let selected = "/login";
+    if let Some(flash) = flash {
+        let error = flash.message();
+        Ok(Template::render("login", context! { error, selected }))
     } else {
-        let failed = params.contains_key("failed");
-        Ok(Template::render("login", context! { failed, selected: "/login" }))
+        Ok(Template::render("login", context! { selected }))
     }
 }
 
@@ -32,12 +37,15 @@ pub(crate) async fn login(
     credentials: Form<Login>,
     cookies: &CookieJar<'_>,
     db: &State<Db>,
-) -> Redirect {
+) -> Result<Redirect, Flash<Redirect>> {
     let Login { username, password } = credentials.into_inner();
     if log_in(db, cookies, &username, &password).await {
-        redirect!("/")
+        Ok(redirect!("/"))
     } else {
-        redirect!("/login?failed")
+        Err(Flash::error(
+            redirect!("/login"),
+            "Wrong username or password.",
+        ))
     }
 }
 
