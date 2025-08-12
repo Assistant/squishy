@@ -1,5 +1,5 @@
 use std::collections::BTreeMap;
-use surrealdb::sql;
+use surrealdb::sql::{self, Id};
 
 macro_rules! params {
     () => {
@@ -26,8 +26,8 @@ fn parse_id(id: &str) -> sql::Value {
     let (Some(tb), Some(id)) = (parts.next(), parts.next()) else {
         return sql::Value::None;
     };
-    let (tb, id) = (tb.into(), id.into());
-    sql::Value::Thing(sql::Thing { tb, id })
+    let thing: (String, Id) = (tb.into(), id.into());
+    sql::Value::Thing(sql::Thing::from(thing))
 }
 
 pub(crate) fn get_params(params: Vec<(&str, &str)>) -> BTreeMap<String, sql::Value> {

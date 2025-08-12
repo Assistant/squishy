@@ -5,12 +5,12 @@ use rocket::{
     Build, Rocket,
 };
 use std::collections::BTreeMap;
-use surrealdb::{sql::Value, Datastore, Error, Session};
+use surrealdb::{dbs::Session, error, kvs::Datastore, sql::Value, Error};
 
 impl Db {
     pub(crate) async fn new(namespace: &str, database: &str, datastore: &str) -> Self {
         Self {
-            session: Session::for_db(namespace.to_string(), database.to_string()),
+            session: Session::owner().with_ns(namespace).with_db(database),
             datastore: Datastore::new(datastore).await.unwrap(),
         }
     }
@@ -22,17 +22,17 @@ impl Db {
     ) -> Result<Value, Error> {
         let responses = self
             .datastore
-            .execute(statement, &self.session, vars, false)
+            .execute(statement, &self.session, vars)
             .await?;
         responses
             .into_iter()
             .last()
             .and_then(|r| r.result.ok())
-            .ok_or(Error::Ignore)
+            .ok_or(Error::Db(error::Db::QueryEmpty))
     }
 
     fn parse(value: Value) -> Result<json::Value, Error> {
-        json::to_value(value).ok().ok_or(Error::Ignore)
+        json::to_value(value).map_err(|e| Error::Db(error::Db::Thrown(e.to_string())))
     }
 
     pub(crate) async fn find_one(
