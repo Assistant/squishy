@@ -151,8 +151,8 @@ mod tests {
         let mut parts = id.split(':');
         let tb = parts.next().unwrap();
         let id = parts.next().unwrap();
-        let (tb, id) = (tb.into(), id.into());
-        let id = sql::Value::Thing(sql::Thing { tb, id });
+        let thing: (String, Id) = (tb.into(), id.into());
+        let id = sql::Value::Thing(sql::Thing::from(thing));
 
         let mut map = BTreeMap::new();
         map.insert("id".to_string(), id);
@@ -168,8 +168,8 @@ mod tests {
         let mut parts = test.split(':');
         let tb = parts.next().unwrap();
         let id = parts.next().unwrap();
-        let (tb, id) = (tb.into(), id.into());
-        let id = sql::Value::Thing(sql::Thing { tb, id });
+        let thing: (String, Id) = (tb.into(), id.into());
+        let id = sql::Value::Thing(sql::Thing::from(thing));
 
         let mut map = BTreeMap::new();
         map.insert("id".to_string(), id);
