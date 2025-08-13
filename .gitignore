@@ -1,4 +1,6 @@
 /target
+/result
+Rocket.toml
 Surreal.toml
 Secret.toml
 /static/style.css
