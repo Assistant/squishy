@@ -1,17 +1,12 @@
 use super::utils::redirect;
-use crate::{
-    auth::AuthenticatedUser,
-    db::{functions, Db},
-};
-use rocket::{
-    form::Form,
-    http::{Cookie, CookieJar, Status},
-    request::FlashMessage,
-    response::{Flash, Redirect},
-    serde::Deserialize,
-    State,
-};
+use crate::{auth::AuthenticatedUser, db::functions};
+use rocket::http::{Cookie, CookieJar, Status};
+use rocket::request::FlashMessage;
+use rocket::response::{Flash, Redirect};
+use rocket::{form::Form, serde::Deserialize, State};
 use rocket_dyn_templates::{context, Template};
+
+type Db = surrealdb::Surreal<surrealdb::engine::local::Db>;
 
 #[get("/login")]
 #[allow(clippy::result_large_err)]
@@ -85,7 +80,8 @@ pub(crate) async fn add_invite(db: &State<Db>, _user: AuthenticatedUser) -> Resu
     }
 }
 
-#[derive(FromForm, Debug)]
+#[derive(FromForm, Debug, Deserialize)]
+#[serde(crate = "rocket::serde")]
 pub(crate) struct Login {
     pub(crate) username: String,
     pub(crate) password: String,

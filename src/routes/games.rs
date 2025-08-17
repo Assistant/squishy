@@ -1,15 +1,11 @@
 use super::utils::redirect;
-use crate::{
-    auth::AuthenticatedUser,
-    db::{functions, Db},
-};
-use rocket::{
-    form::Form,
-    response::Redirect,
-    serde::{Deserialize, Serialize},
-    State,
-};
+use crate::auth::AuthenticatedUser;
+use crate::db::functions;
+use rocket::serde::{Deserialize, Serialize};
+use rocket::{form::Form, response::Redirect, State};
 use rocket_dyn_templates::{context, Template};
+
+type Db = surrealdb::Surreal<surrealdb::engine::local::Db>;
 
 #[get("/games")]
 pub(crate) async fn index(db: &State<Db>, user: Option<AuthenticatedUser>) -> Template {

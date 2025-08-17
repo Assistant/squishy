@@ -46,14 +46,15 @@ pub(crate) static ADD_SONG: &str =
 pub(crate) static CHECK_SONG: &str =
     "SELECT * FROM song WHERE artist = $artist AND title = $title AND year = $year";
 
-pub(crate) static GAMES: &str = "SELECT * FROM game ORDER BY name ASC;";
+pub(crate) static GAMES: &str =
+    "SELECT string::concat(id.id) AS id, name, status FROM game ORDER BY name ASC;";
 pub(crate) static ADD_GAME: &str =
     "CREATE game SET name = $name, status = $status, modified = time::now();";
 pub(crate) static CHECK_GAME: &str = "SELECT * FROM game WHERE name = $name;";
 pub(crate) static CHECK_GAME_ID: &str = "SELECT * FROM $id;";
 pub(crate) static UPDATE_GAME: &str = "UPDATE $id SET status = $status, modified = time::now();";
 
-pub(crate) static AUTH: &str = "SELECT * FROM crypto::argon2::compare(type::string((SELECT password FROM user WHERE username = $username LIMIT 1)), $password);";
+pub(crate) static AUTH: &str = "SELECT * FROM crypto::argon2::compare(array::first((SELECT VALUE password FROM user WHERE username = $username LIMIT 1)), $password);";
 pub(crate) static ADD_USER: &str =
     "CREATE user SET username = $username, password = crypto::argon2::generate($password);";
 pub(crate) static CHECK_USER: &str = "SELECT * FROM user WHERE username = $username;";

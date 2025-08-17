@@ -1,7 +1,9 @@
-use super::db::{functions::auth, Db};
+use super::db::functions::auth;
 use rocket::request::{FromRequest, Outcome};
 use rocket::{http::Status, Request};
 use std::error::Error;
+
+type Db = surrealdb::Surreal<surrealdb::engine::local::Db>;
 
 pub(crate) struct AuthenticatedUser;
 

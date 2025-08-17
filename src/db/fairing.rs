@@ -1,75 +1,8 @@
-use super::Db;
-use rocket::{
-    fairing::{Fairing, Info, Kind, Result},
-    serde::{json, Deserialize},
-    Build, Rocket,
-};
-use std::collections::BTreeMap;
-use surrealdb::{dbs::Session, error, kvs::Datastore, sql::Value, Error};
-
-impl Db {
-    pub(crate) async fn new(namespace: &str, database: &str, datastore: &str) -> Self {
-        Self {
-            session: Session::owner().with_ns(namespace).with_db(database),
-            datastore: Datastore::new(datastore).await.unwrap(),
-        }
-    }
-
-    pub(crate) async fn query(
-        &self,
-        statement: &str,
-        vars: Option<BTreeMap<String, Value>>,
-    ) -> Result<Value, Error> {
-        let responses = self
-            .datastore
-            .execute(statement, &self.session, vars)
-            .await?;
-        responses
-            .into_iter()
-            .last()
-            .and_then(|r| r.result.ok())
-            .ok_or(Error::Db(error::Db::QueryEmpty))
-    }
-
-    fn parse(value: Value) -> Result<json::Value, Error> {
-        json::to_value(value).map_err(|e| Error::Db(error::Db::Thrown(e.to_string())))
-    }
-
-    pub(crate) async fn find_one(
-        &self,
-        statement: &str,
-        vars: Option<BTreeMap<String, Value>>,
-    ) -> Result<json::Value, Error> {
-        let result = self.find_many(statement, vars).await?;
-        let value = if result.is_array() {
-            if !result.as_array().unwrap().is_empty() {
-                result[0].clone()
-            } else {
-                json::Value::Null
-            }
-        } else {
-            result
-        };
-        Ok(value)
-    }
-
-    pub(crate) async fn find_many(
-        &self,
-        statement: &str,
-        vars: Option<BTreeMap<String, Value>>,
-    ) -> Result<json::Value, Error> {
-        Self::parse(self.query(statement, vars).await?)
-    }
-
-    pub(crate) async fn exists(
-        &self,
-        statement: &str,
-        vars: Option<BTreeMap<String, Value>>,
-    ) -> Result<bool, Error> {
-        let result = self.query(statement, vars).await?;
-        Ok(result.is_truthy())
-    }
-}
+use rocket::fairing::{Fairing, Info, Kind, Result};
+use rocket::serde::Deserialize;
+use rocket::{Build, Rocket};
+use surrealdb::engine::local::RocksDb;
+use surrealdb::Surreal;
 
 pub(crate) struct DbFairing;
 
@@ -98,12 +31,14 @@ impl Fairing for DbFairing {
             .extract()
             .expect("Surreal.toml config");
 
-        let db = Db::new(
-            &db_config.namespace,
-            &db_config.database,
-            &db_config.datastore,
-        )
-        .await;
+        let db = Surreal::new::<RocksDb>(&db_config.datastore)
+            .await
+            .expect("Failed to initialize database");
+
+        db.use_ns(&db_config.namespace)
+            .use_db(&db_config.database)
+            .await
+            .expect("Failed to set namespace and database");
 
         Ok(rocket.manage(db))
     }
