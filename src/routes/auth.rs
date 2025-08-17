@@ -9,7 +9,7 @@ use rocket_dyn_templates::{context, Template};
 type Db = surrealdb::Surreal<surrealdb::engine::local::Db>;
 
 #[get("/login")]
-#[allow(clippy::result_large_err)]
+#[allow(clippy::result_large_err, clippy::needless_pass_by_value)]
 pub(crate) fn index(
     user: Option<AuthenticatedUser>,
     flash: Option<FlashMessage<'_>>,

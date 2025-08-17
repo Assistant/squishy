@@ -16,7 +16,7 @@ macro_rules! params {
         (stringify!($key), $value)
     };
     (_[$($input:expr),*]) => {
-        Some(crate::db::utils::get_params(vec![$($input),*]))
+        Some(crate::db::utils::get_params(&[$($input),*]))
     };
 }
 pub(crate) use params;
@@ -30,12 +30,12 @@ fn parse_id(id: &str) -> sql::Value {
     sql::Value::Thing(sql::Thing::from(thing))
 }
 
-pub(crate) fn get_params(params: Vec<(&str, &str)>) -> BTreeMap<String, sql::Value> {
+pub(crate) fn get_params(params: &[(&str, &str)]) -> BTreeMap<String, sql::Value> {
     params
         .iter()
         .map(|p| match p {
             ("id", v) => ("id".to_string(), parse_id(v)),
-            (k, v) => (k.to_string(), sql::Value::from(*v)),
+            (k, v) => ((*k).to_string(), sql::Value::from(*v)),
         })
         .collect()
 }

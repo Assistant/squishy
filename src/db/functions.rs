@@ -10,7 +10,7 @@ use surrealdb::{error::Db::QueryEmpty, Response, Surreal};
 
 type Db = Surreal<surrealdb::engine::local::Db>;
 
-async fn exists<T: for<'a> Deserialize<'a>>(result: Result<Response, surrealdb::Error>) -> bool {
+fn exists<T: for<'a> Deserialize<'a>>(result: Result<Response, surrealdb::Error>) -> bool {
     match result {
         Ok(mut response) => match response.take::<Vec<T>>(0) {
             Ok(v) => !v.is_empty(),
@@ -35,7 +35,7 @@ pub(crate) async fn add_song(db: &Db, artist: &str, title: &str, year: &str) {
 
     let vars = params! { artist, title, year };
 
-    if !exists::<Song>(db.query(CHECK_SONG).bind(vars.clone()).await).await {
+    if !exists::<Song>(db.query(CHECK_SONG).bind(vars.clone()).await) {
         _ = db.query(ADD_SONG).bind(vars).await;
     }
 }
@@ -55,14 +55,14 @@ pub(crate) async fn add_game(db: &Db, name: &str, status: &str) {
 
     let vars = params! { name, status };
 
-    if !exists::<Game>(db.query(CHECK_GAME).bind(vars.clone()).await).await {
+    if !exists::<Game>(db.query(CHECK_GAME).bind(vars.clone()).await) {
         _ = db.query(ADD_GAME).bind(vars).await;
     }
 }
 
 pub(crate) async fn update_game(db: &Db, id: &str, status: &str) {
     let vars = params! { id, status };
-    if exists::<Game>(db.query(CHECK_GAME_ID).bind(vars.clone()).await).await {
+    if exists::<Game>(db.query(CHECK_GAME_ID).bind(vars.clone()).await) {
         _ = db.query(UPDATE_GAME).bind(vars).await;
     }
 }
@@ -83,9 +83,9 @@ pub(crate) async fn auth(db: &Db, username: &str, password: &str) -> Result<bool
 
 pub(crate) async fn add_user(db: &Db, username: &str, password: &str, invite: &str) -> bool {
     let vars = params! { username, password };
-    if exists::<Login>(db.query(CHECK_USER).bind(vars.clone()).await).await {
+    if exists::<Login>(db.query(CHECK_USER).bind(vars.clone()).await) {
         return false;
-    };
+    }
     if !check_invite(db, invite).await {
         return false;
     }
@@ -108,5 +108,5 @@ pub(crate) async fn add_invite(db: &Db) -> Result<Invite, Box<dyn Error>> {
 
 pub(crate) async fn check_invite(db: &Db, invite: &str) -> bool {
     let vars = params! { invite };
-    exists::<bool>(db.query(CHECK_INVITE).bind(vars).await).await
+    exists::<bool>(db.query(CHECK_INVITE).bind(vars).await)
 }
